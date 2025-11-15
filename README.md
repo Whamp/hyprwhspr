@@ -1,20 +1,14 @@
 <h1 align="center">
-    HyprChirp (hyprchrp)
+    HyprChrp (hyprchrp)
 </h1>
 
 <p align="center">
-    <b>Native speech-to-text for Arch / Omarchy</b> - Fast, accurate and easy system-wide dictation
+    <b>Native speech-to-text for Arch / Omarchy</b> - Fast, accurate and easy system-wide dictation with parakeet V3
 </p>
 
 <p align="center">
 all local | waybar integration | audio feedback | auto-paste | cpu-first Parakeet | optional gpu
 </p>
-
- <p align="center">
-    <i>pssst...un-mute!</i>
- </p>
-
-https://github.com/user-attachments/assets/40cb1837-550c-4e6e-8d61-07ea59898f12
 
 ---
 
@@ -28,7 +22,7 @@ https://github.com/user-attachments/assets/40cb1837-550c-4e6e-8d61-07ea59898f12
 
 > 🔐 **PRIVATE**: hyprchrp is local and never reads any clipboard / audio content 
 
-> ℹ️ **Fork note:** HyprChirp is a hard fork of the original hyprwhspr project, layering Parakeet V3 ONNX-ASR support on top of the existing Whisper + pywhispercpp stack.
+> ℹ️ **Fork note:** HyprChrp is a hard fork of the original hyprwhspr project, layering Parakeet V3 ONNX-ASR support on top of the existing Whisper + pywhispercpp stack.
 
 ## Quick start
 

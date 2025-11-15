@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 **hyprchrp** is a native speech-to-text application for Arch Linux/Omarchy with Hyprland desktop environment. It now offers dual backends: Parakeet TDT v3 via ONNX-ASR (CPU-only, Whisper-large-level accuracy) and OpenAI's Whisper via pywhispercpp (with optional CUDA/ROCm/Vulkan acceleration).
 
-> HyprChirp is a fork of hyprwhspr, modernized to make the Parakeet V3 ONNX backend first-class while still shipping the full Whisper + pywhispercpp workflow.
+> HyprChrp is a fork of hyprwhspr, modernized to make the Parakeet V3 ONNX backend first-class while still shipping the full Whisper + pywhispercpp workflow.
 
 **Key Features:**
 - Global hotkey dictation (Super+Alt+D by default)

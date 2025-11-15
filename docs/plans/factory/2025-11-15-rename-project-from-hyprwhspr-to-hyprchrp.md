@@ -13,7 +13,7 @@ If you confirm this plan, I’ll implement the changes step by step and keep thi
 ---
 ## Naming decisions
 **Canonical new name:**
-- Project / marketing: **HyprChirp** (docs text), code-level identifier: `hyprchrp`.
+- Project / marketing: **HyprChrp** (docs text), code-level identifier: `hyprchrp`.
 - CLI binary: `hyprchrp` (with an optional legacy `hyprwhspr` wrapper).
 - Systemd unit: `hyprchrp.service`.
 - Install prefix: `/usr/lib/hyprchrp`.
@@ -31,7 +31,7 @@ No backwards compatibility is required. This should be a strict break.
 ### 1. Project metadata & packaging
 - **`pyproject.toml`**
   - Change `[project] name` from `"hyprwhspr"` to `"hyprchrp"`.
-  - Optionally update `description` to mention HyprChirp by name.
+  - Optionally update `description` to mention HyprChrp by name.
 - **`uv.lock`**
   - Update the top-level package entry name from `hyprwhspr` to `hyprchrp` (or regenerate the lockfile after the rename).
 - **Repository naming in docs**
@@ -141,7 +141,7 @@ No backwards compatibility is required. This should be a strict break.
 
 ### 7. Documentation updates
 - **`README.md`**
-  - Change project heading and textual references to `hyprchrp` / “HyprChirp”.
+  - Change project heading and textual references to `hyprchrp` / “HyprChrp”.
   - Update all paths and commands:
     - `/usr/lib/hyprwhspr` → `/usr/lib/hyprchrp`.
     - `~/.local/share/hyprwhspr/...` → `~/.local/share/hyprchrp/...`.
