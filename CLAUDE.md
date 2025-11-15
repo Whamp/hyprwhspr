@@ -149,8 +149,6 @@ Both are user-level services (no root required).
 - `clipboard_behavior` - Auto-clear clipboard after injection
 - `audio_feedback` - Enable/disable sound notifications
 
-**Defaults** are defined in `config_manager.py:16-30`. The `threads` value directly affects Whisper; Parakeet stores the value for future ONNX Runtime reloads but live behavior is governed by ONNX Runtime itself.
-
 ### Service Architecture
 
 **Systemd Services** are defined in `config/systemd/`:
