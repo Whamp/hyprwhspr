@@ -564,14 +564,3 @@ systemctl --user status hyprchrp.service
 
 MIT License - see [LICENSE](LICENSE) file.
 
-## Contributing
-
-Create an issue, happy to help!  
-
-For pull requests, also best to start with an issue.
-
----
-
-**Built with ❤️ in 🇨🇦 for the Omarchy community**
-
-*Integrated and natural speech-to-text.*
