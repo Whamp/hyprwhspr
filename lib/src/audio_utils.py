@@ -1,5 +1,5 @@
 """
-Audio utility functions for hyprwhspr
+Audio utility functions for hyprchrp
 Shared utilities for audio file handling
 """
 

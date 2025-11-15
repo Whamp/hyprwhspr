@@ -1,7 +1,7 @@
 #!/bin/bash
-# hyprwhspr Omarchy/Arch Installation Script
-#   • Static files: /usr/lib/hyprwhspr (read-only system files)
-#   • Runtime data: ~/.local/share/hyprwhspr (user space, always writable)
+# hyprchrp Omarchy/Arch Installation Script
+#   • Static files: /usr/lib/hyprchrp (read-only system files)
+#   • Runtime data: ~/.local/share/hyprchrp (user space, always writable)
 
 set -euo pipefail
 
@@ -18,17 +18,17 @@ warn() { log_warning "$@"; }
 err()  { log_error "$@"; }
 
 # ----------------------- Configuration -------------------------
-PACKAGE_NAME="hyprwhspr"
-INSTALL_DIR="/usr/lib/hyprwhspr"  # Always read-only system files
-SERVICE_NAME="hyprwhspr.service"
+PACKAGE_NAME="hyprchrp"
+INSTALL_DIR="/usr/lib/hyprchrp"  # Always read-only system files
+SERVICE_NAME="hyprchrp.service"
 YDOTOOL_UNIT="ydotool.service"
 
 # Always use user space for runtime data (consistent across all installations)
-USER_BASE="${XDG_DATA_HOME:-$HOME/.local/share}/hyprwhspr"
+USER_BASE="${XDG_DATA_HOME:-$HOME/.local/share}/hyprchrp"
 VENV_DIR="$USER_BASE/venv"                    # Python virtual environment
 PYWHISPERCPP_MODELS_DIR="${XDG_DATA_HOME:-$HOME/.local/share}/pywhispercpp/models" # pywhispercpp model dir
 USER_BIN_DIR="$HOME/.local/bin"               # User's local bin directory
-STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprwhspr"
+STATE_DIR="${XDG_STATE_HOME:-$HOME/.local/state}/hyprchrp"
 STATE_FILE="$STATE_DIR/install-state.json"    # Persistent installation state
 
 # ----------------------- Detect actual user --------------------
@@ -61,7 +61,7 @@ if [ -z "$USER_HOME" ] || [ ! -d "$USER_HOME" ]; then
   log_error "Invalid user home directory for user: $ACTUAL_USER"
   exit 1
 fi
-USER_CONFIG_DIR="$USER_HOME/.config/hyprwhspr"
+USER_CONFIG_DIR="$USER_HOME/.config/hyprchrp"
 
 # ----------------------- Command line options ------------------
 CHECK_MODE=false
@@ -72,7 +72,7 @@ fi
 
 # ----------------------- Preconditions -------------------------
 command -v pacman >/dev/null 2>&1 || { log_error "Arch Linux required."; exit 1; }
-log_info "Setting up hyprwhspr for user: $ACTUAL_USER"
+log_info "Setting up hyprchrp for user: $ACTUAL_USER"
 log_info "Unified installation approach"
 log_info "INSTALL_DIR=$INSTALL_DIR (static application files)"
 log_info "USER_BASE=$USER_BASE (runtime data)"
@@ -85,11 +85,11 @@ log_info "VENV_DIR=$VENV_DIR"
 # Validate that INSTALL_DIR contains required files
 validate_install_dir() {
   local required_files=(
-    "bin/hyprwhspr"
+    "bin/hyprchrp"
     "lib/main.py"
     "requirements.txt"
-    "config/hyprland/hyprwhspr-tray.sh"
-    "config/systemd/hyprwhspr.service"
+    "config/hyprland/hyprchrp-tray.sh"
+    "config/systemd/hyprchrp.service"
   )
   
   for file in "${required_files[@]}"; do
@@ -108,8 +108,8 @@ ensure_path_contains_local_bin() {
 
 detect_cuda_host_compiler() {
   # Allow explicit override
-  if [[ -n "${HYPRWHSPR_CUDA_HOST:-}" && -x "$HYPRWHSPR_CUDA_HOST" ]]; then
-    echo "$HYPRWHSPR_CUDA_HOST"; return 0
+  if [[ -n "${HYPRCHRP_CUDA_HOST:-}" && -x "$HYPRCHRP_CUDA_HOST" ]]; then
+    echo "$HYPRCHRP_CUDA_HOST"; return 0
   fi
   local gcc_major
   gcc_major=$(gcc -dumpfullversion 2>/dev/null | cut -d. -f1 || echo 0)
@@ -236,7 +236,7 @@ generate_installation_plan() {
   
   # Check waybar config (simplified check)
   local waybar_config="$USER_HOME/.config/waybar/config.jsonc"
-  if [ -f "$waybar_config" ] && grep -q "custom/hyprwhspr" "$waybar_config"; then
+  if [ -f "$waybar_config" ] && grep -q "custom/hyprchrp" "$waybar_config"; then
     log_info "  • waybar: OK (configured)"
   else
     log_info "  • waybar: UPDATE (needs configuration)"
@@ -257,7 +257,7 @@ install_system_dependencies() {
   
   # Always install waybar when this script runs (it's designed for full setup)
   pkgs+=(waybar)
-  log_info "Installing waybar as part of hyprwhspr setup"
+  log_info "Installing waybar as part of hyprchrp setup"
   
   local to_install=()
   for p in "${pkgs[@]}"; do pacman -Q "$p" &>/dev/null || to_install+=("$p"); done
@@ -473,7 +473,7 @@ setup_nvidia_support() {
         if [[ "$gcc_major" -ge 15 ]]; then
           log_warning "GCC $gcc_major with NVCC can fail; consider:"
           log_warning "  yay -S gcc14 gcc14-libs"
-          log_warning "  HYPRWHSPR_CUDA_HOST=/usr/bin/g++-14 hyprwhspr-setup"
+          log_warning "  HYPRCHRP_CUDA_HOST=/usr/bin/g++-14 hyprchrp-setup"
         fi
       fi
     else
@@ -536,8 +536,8 @@ setup_systemd_service() {
   log_info "Configuring systemd user services…"
 
   # Validate main executable exists
-  if [ ! -x "$INSTALL_DIR/bin/hyprwhspr" ]; then
-    log_error "Main executable not found or not executable: $INSTALL_DIR/bin/hyprwhspr"
+  if [ ! -x "$INSTALL_DIR/bin/hyprchrp" ]; then
+    log_error "Main executable not found or not executable: $INSTALL_DIR/bin/hyprchrp"
     return 1
   fi
 
@@ -565,13 +565,13 @@ setup_waybar_integration() {
   log_info "Waybar integration…"
   
   # Validate required files exist
-  if [ ! -f "$INSTALL_DIR/config/hyprland/hyprwhspr-tray.sh" ]; then
-    log_error "Tray script not found: $INSTALL_DIR/config/hyprland/hyprwhspr-tray.sh"
+  if [ ! -f "$INSTALL_DIR/config/hyprland/hyprchrp-tray.sh" ]; then
+    log_error "Tray script not found: $INSTALL_DIR/config/hyprland/hyprchrp-tray.sh"
     return 1
   fi
   
-  if [ ! -f "$INSTALL_DIR/config/waybar/hyprwhspr-style.css" ]; then
-    log_error "Waybar CSS not found: $INSTALL_DIR/config/waybar/hyprwhspr-style.css"
+  if [ ! -f "$INSTALL_DIR/config/waybar/hyprchrp-style.css" ]; then
+    log_error "Waybar CSS not found: $INSTALL_DIR/config/waybar/hyprchrp-style.css"
     return 1
   fi
 
@@ -584,7 +584,7 @@ setup_waybar_integration() {
   local waybar_config="$USER_HOME/.config/waybar/config.jsonc"
   if [ ! -f "$waybar_config" ]; then
     log_warning "Waybar config not found ($waybar_config)"
-    log_info "Creating basic Waybar config with hyprwhspr integration..."
+    log_info "Creating basic Waybar config with hyprchrp integration..."
     
     # Create basic waybar config
     mkdir -p "$USER_HOME/.config/waybar"
@@ -595,26 +595,26 @@ setup_waybar_integration() {
   "height": 30,
   "modules-left": ["hyprland/workspaces"],
   "modules-center": ["hyprland/window"],
-  "modules-right": ["custom/hyprwhspr", "clock", "tray"],
-  "include": ["/usr/lib/hyprwhspr/config/waybar/hyprwhspr-module.jsonc"]
+  "modules-right": ["custom/hyprchrp", "clock", "tray"],
+  "include": ["/usr/lib/hyprchrp/config/waybar/hyprchrp-module.jsonc"]
 }
 WAYBAR_CONFIG
     log_success "Created basic Waybar config"
   fi
 
   # Create a user-specific waybar module configuration
-  local user_module_config="$USER_HOME/.config/waybar/hyprwhspr-module.jsonc"
+  local user_module_config="$USER_HOME/.config/waybar/hyprchrp-module.jsonc"
   cat > "$user_module_config" <<WAYBAR_MODULE_CONFIG
 {
-  "custom/hyprwhspr": {
+  "custom/hyprchrp": {
     "format": "{}",
-    "exec": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh status",
+    "exec": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh status",
     "interval": 1,
     "return-type": "json",
     "exec-on-event": true,
-    "on-click": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh toggle",
-    "on-click-right": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh start",
-    "on-click-middle": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh restart",
+    "on-click": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh toggle",
+    "on-click-right": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh start",
+    "on-click-middle": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh restart",
     "tooltip": true
   }
 }
@@ -654,15 +654,15 @@ try:
     
     if module_path not in config['include']:
         config['include'].append(module_path)
-        print('Added hyprwhspr module to include list')
+        print('Added hyprchrp module to include list')
     
     # Add module to modules-right if not present
     if 'modules-right' not in config:
         config['modules-right'] = []
     
-    if 'custom/hyprwhspr' not in config['modules-right']:
-        config['modules-right'].insert(0, 'custom/hyprwhspr')
-        print('Added custom/hyprwhspr to modules-right array')
+    if 'custom/hyprchrp' not in config['modules-right']:
+        config['modules-right'].insert(0, 'custom/hyprchrp')
+        print('Added custom/hyprchrp to modules-right array')
     
     # Write back the config with proper JSON formatting
     with open(config_path, 'w') as f:
@@ -701,17 +701,17 @@ except Exception as e:
   # Kill the test waybar instance
   pkill -f "waybar --config $waybar_config" 2>/dev/null || true
 
-  if [ -f "$INSTALL_DIR/config/waybar/hyprwhspr-style.css" ]; then
+  if [ -f "$INSTALL_DIR/config/waybar/hyprchrp-style.css" ]; then
     log_info "Adding CSS import to waybar style.css..."
     local waybar_style="$USER_HOME/.config/waybar/style.css"
-    if [ -f "$waybar_style" ] && ! grep -q "hyprwhspr-style.css" "$waybar_style"; then
+    if [ -f "$waybar_style" ] && ! grep -q "hyprchrp-style.css" "$waybar_style"; then
       # Use Python for safer CSS manipulation
       "$VENV_DIR/bin/python3" <<EOF
 import sys
 import os
 
 css_file = "$waybar_style"
-import_line = '@import "/usr/lib/hyprwhspr/config/waybar/hyprwhspr-style.css";'
+import_line = '@import "/usr/lib/hyprchrp/config/waybar/hyprchrp-style.css";'
 
 try:
     with open(css_file, 'r') as f:
@@ -751,7 +751,7 @@ EOF
       log_warning "No waybar style.css found - user will need to add CSS import manually"
     fi
   else
-    log_error "✗ Waybar CSS file not found at $INSTALL_DIR/config/waybar/hyprwhspr-style.css"
+    log_error "✗ Waybar CSS file not found at $INSTALL_DIR/config/waybar/hyprchrp-style.css"
     return 1
   fi
 
@@ -893,7 +893,7 @@ test_installation() {
   log_info "Testing installation…"
   
   # Test static files
-  [ -f "$INSTALL_DIR/bin/hyprwhspr" ] || { log_error "Main executable missing"; return 1; }
+  [ -f "$INSTALL_DIR/bin/hyprchrp" ] || { log_error "Main executable missing"; return 1; }
   [ -f "$INSTALL_DIR/requirements.txt" ] || { log_error "Requirements file missing"; return 1; }
   
   # Test runtime files
@@ -910,7 +910,7 @@ test_installation() {
     return 1
   fi
 
-  if "$USER_HOME/.config/hypr/scripts/hyprwhspr-tray.sh" status >/dev/null 2>&1; then
+  if "$USER_HOME/.config/hypr/scripts/hyprchrp-tray.sh" status >/dev/null 2>&1; then
     log_success "Tray script working"
   else
     log_warning "Tray script not found or not executable (ok if Hyprland not configured)"
@@ -942,7 +942,7 @@ main() {
     sudo chown -R "$ACTUAL_USER:$ACTUAL_USER" "$INSTALL_DIR"
     
     # Verify critical files were copied
-    if [ -f "$INSTALL_DIR/config/waybar/hyprwhspr-style.css" ]; then
+    if [ -f "$INSTALL_DIR/config/waybar/hyprchrp-style.css" ]; then
       log_success "✓ Waybar CSS file copied successfully"
     else
       log_error "✗ Waybar CSS file missing after copy operation"
@@ -984,11 +984,11 @@ main() {
   systemctl --user restart "$SERVICE_NAME"
   log_success "Services restarted successfully"
 
-  log_success "✓ hyprwhspr installation completed!"
+  log_success "✓ hyprchrp installation completed!"
   log_info ""
   log_info "Next steps:"
   log_info "  • Reboot your system to apply all changes"
-  log_info "  • After reboot, hyprwhspr will be ready to use!"
+  log_info "  • After reboot, hyprchrp will be ready to use!"
   log_info ""
   log_info "Service status:"
   log_info "  systemctl --user status $YDOTOOL_UNIT $SERVICE_NAME"

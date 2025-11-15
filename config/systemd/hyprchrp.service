@@ -1,0 +1,20 @@
+[Unit]
+Description=hyprchrp Voice Dictation Service
+Documentation=https://github.com/goodroot/hyprchrp
+After=graphical-session.target pipewire.service ydotool.service
+Wants=pipewire.service ydotool.service
+
+[Service]
+Type=simple
+ExecStartPre=/bin/sleep 2
+ExecStart=/usr/lib/hyprchrp/bin/hyprchrp
+Environment=HYPRCHRP_ROOT=/usr/lib/hyprchrp
+Restart=on-failure
+RestartSec=5
+StartLimitIntervalSec=10
+StartLimitBurst=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=default.target

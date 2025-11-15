@@ -1,17 +1,17 @@
 #!/bin/bash
-# Test script for hyprwhspr systemd services
+# Test script for hyprchrp systemd services
 
 set -e
 
-echo "🧪 Testing hyprwhspr systemd services..."
+echo "🧪 Testing hyprchrp systemd services..."
 
 # Check if services are loaded
 echo "📋 Checking service status..."
 
-echo "1. hyprwhspr service:"
-if systemctl --user is-active hyprwhspr.service &> /dev/null; then
+echo "1. hyprchrp service:"
+if systemctl --user is-active hyprchrp.service &> /dev/null; then
     echo "   ✅ Running"
-elif systemctl --user is-enabled hyprwhspr.service &> /dev/null; then
+elif systemctl --user is-enabled hyprchrp.service &> /dev/null; then
     echo "   ⚠️  Enabled but not running"
 else
     echo "   ❌ Not configured"
@@ -44,11 +44,11 @@ fi
 
 # Check if services can be started
 echo "5. Testing service start capability:"
-if systemctl --user start hyprwhspr.service 2>/dev/null; then
-    echo "   ✅ hyprwhspr can be started"
-    systemctl --user stop hyprwhspr.service 2>/dev/null
+if systemctl --user start hyprchrp.service 2>/dev/null; then
+    echo "   ✅ hyprchrp can be started"
+    systemctl --user stop hyprchrp.service 2>/dev/null
 else
-    echo "   ❌ hyprwhspr cannot be started"
+    echo "   ❌ hyprchrp cannot be started"
 fi
 
 if systemctl --user start ydotool.service 2>/dev/null; then
@@ -64,5 +64,5 @@ echo "If you see any ❌ marks above, the services may need configuration."
 echo "Run './scripts/install-services.sh' to set up the services properly."
 echo ""
 echo "To start services manually:"
-echo "  systemctl --user start hyprwhspr"
+echo "  systemctl --user start hyprchrp"
 echo "  systemctl --user start ydotool"

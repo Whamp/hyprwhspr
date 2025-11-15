@@ -1,5 +1,5 @@
 """
-Configuration manager for hyprwhspr
+Configuration manager for hyprchrp
 Handles loading, saving, and managing application settings
 """
 
@@ -12,7 +12,7 @@ class ConfigManager:
     """Manages application configuration and settings"""
     
     def __init__(self):
-        # Default configuration values - minimal set for hyprwhspr
+        # Default configuration values - minimal set for hyprchrp
         self.default_config = {
             'primary_shortcut': 'Ctrl+Shift',  # Default primary shortcut
             'stt_backend': 'parakeet',  # "whisper" or "parakeet"
@@ -34,7 +34,7 @@ class ConfigManager:
         }
         
         # Set up config directory and file path
-        self.config_dir = Path.home() / '.config' / 'hyprwhspr'
+        self.config_dir = Path.home() / '.config' / 'hyprchrp'
         self.config_file = self.config_dir / 'config.json'
         
         # Current configuration (starts with defaults)
@@ -107,7 +107,7 @@ class ConfigManager:
     def get_temp_directory(self) -> Path:
         """Get the temporary directory for audio files"""
         # Use user-writable temp directory instead of system installation directory
-        temp_dir = Path.home() / '.local' / 'share' / 'hyprwhspr' / 'temp'
+        temp_dir = Path.home() / '.local' / 'share' / 'hyprchrp' / 'temp'
         temp_dir.mkdir(parents=True, exist_ok=True)
         return temp_dir
     

@@ -1,7 +1,7 @@
 [project]
-name = "hyprwhspr"
+name = "hyprchrp"
 version = "0.1.0"
-description = "Native speech-to-text application for Hyprland with GPU acceleration"
+description = "Hyprchrp: Hyprland speech-to-text with Parakeet v3 + Whisper backends"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [

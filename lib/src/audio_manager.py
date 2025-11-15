@@ -1,5 +1,5 @@
 """
-Audio feedback manager for hyprwhspr
+Audio feedback manager for hyprchrp
 Handles audio feedback for dictation start/stop events
 """
 
@@ -36,7 +36,8 @@ class AudioManager:
         
         # Audio file paths - use custom paths if specified, otherwise fall back to defaults
         # Look for assets in the installation directory first, then fall back to relative paths
-        install_dir = Path("/usr/lib/hyprwhspr")
+        env_root = os.environ.get("HYPRCHRP_ROOT")
+        install_dir = Path(env_root) if env_root else Path("/usr/lib/hyprchrp")
         self.assets_dir = install_dir / "share" / "assets"
         
         # Fallback to relative paths if installation directory doesn't exist

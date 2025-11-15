@@ -1,5 +1,5 @@
 """
-Parakeet manager for hyprwhspr
+Parakeet manager for hyprchrp
 ONNX-based backend using onnx-asr library
 """
 
@@ -208,7 +208,7 @@ class ParakeetManager(STTBackend):
 
     def get_available_models(self) -> list:
         """Get list of available Parakeet models"""
-        models_dir = Path.home() / '.local' / 'share' / 'hyprwhspr' / 'models' / 'parakeet'
+        models_dir = Path.home() / '.local' / 'share' / 'hyprchrp' / 'models' / 'parakeet'
         available_models = []
 
         if not models_dir.exists():

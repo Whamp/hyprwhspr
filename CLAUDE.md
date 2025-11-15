@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-**hyprwhspr** is a native speech-to-text application for Arch Linux/Omarchy with Hyprland desktop environment. It now offers dual backends: Parakeet TDT v3 via ONNX-ASR (CPU-only, Whisper-large-level accuracy) and OpenAI's Whisper via pywhispercpp (with optional CUDA/ROCm/Vulkan acceleration).
+**hyprchrp** is a native speech-to-text application for Arch Linux/Omarchy with Hyprland desktop environment. It now offers dual backends: Parakeet TDT v3 via ONNX-ASR (CPU-only, Whisper-large-level accuracy) and OpenAI's Whisper via pywhispercpp (with optional CUDA/ROCm/Vulkan acceleration).
+
+> HyprChirp is a fork of hyprwhspr, modernized to make the Parakeet V3 ONNX backend first-class while still shipping the full Whisper + pywhispercpp workflow.
 
 **Key Features:**
 - Global hotkey dictation (Super+Alt+D by default)
@@ -32,26 +34,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ./scripts/test-services.sh
 
 # Fix uinput permissions
-/usr/lib/hyprwhspr/scripts/fix-uinput-permissions.sh
+/usr/lib/hyprchrp/scripts/fix-uinput-permissions.sh
 ```
 
 ### Running the Application
 ```bash
 # Via systemd service (recommended)
-systemctl --user start hyprwhspr.service
-systemctl --user stop hyprwhspr.service
-systemctl --user restart hyprwhspr.service
-systemctl --user status hyprwhspr.service
+systemctl --user start hyprchrp.service
+systemctl --user stop hyprchrp.service
+systemctl --user restart hyprchrp.service
+systemctl --user status hyprchrp.service
 
 # View logs
-journalctl --user -u hyprwhspr.service -f
+journalctl --user -u hyprchrp.service -f
 journalctl --user -u ydotool.service -f
 
 # Direct execution (development)
-./bin/hyprwhspr
+./bin/hyprchrp
 
 # Or directly with Python
-source ~/.local/share/hyprwhspr/venv/bin/activate
+source ~/.local/share/hyprchrp/venv/bin/activate
 python3 lib/main.py
 ```
 
@@ -63,11 +65,11 @@ Python dependencies are managed via `requirements.txt`:
 - **Parakeet integration:** onnxruntime (>=1.15.0), onnx-asr (>=0.7.0)
 - **System integration:** psutil, rich
 
-Dependencies are installed into a user-space virtual environment at `~/.local/share/hyprwhspr/venv/`.
+Dependencies are installed into a user-space virtual environment at `~/.local/share/hyprchrp/venv/`.
 
 ### Service Management
 The application uses two systemd services:
-- **hyprwhspr.service** - Main application with auto-restart
+- **hyprchrp.service** - Main application with auto-restart
 - **ydotool.service** - Input injection daemon
 
 Both are user-level services (no root required).
@@ -76,8 +78,8 @@ Both are user-level services (no root required).
 
 ### Directory Structure
 ```
-/home/will/Applications/hyprwhspr
-├── bin/hyprwhspr                    # Main launcher script
+/home/will/Applications/hyprchrp
+├── bin/hyprchrp                    # Main launcher script
 ├── lib/
 │   ├── main.py                      # Entry point, application orchestrator
 │   └── src/                         # Core modules
@@ -107,10 +109,10 @@ Both are user-level services (no root required).
 
 ### Core Application Flow
 
-**Entry Point:** `lib/main.py` - `hyprwhsprApp` class
+**Entry Point:** `lib/main.py` - `hyprchrpApp` class
 
 1. **Initialization:**
-   - `ConfigManager` - Loads config from `~/.config/hyprwhspr/config.json`
+   - `ConfigManager` - Loads config from `~/.config/hyprchrp/config.json`
    - `AudioCapture` - Sets up audio device for recording
    - `AudioManager` - Configures audio feedback sounds
    - `STTBackendFactory` - Creates either `ParakeetManager` (ONNX-ASR) or `WhisperManager` (pywhispercpp) based on `stt_backend`
@@ -132,7 +134,7 @@ Both are user-level services (no root required).
 
 ### Configuration System
 
-**Location:** `~/.config/hyprwhspr/config.json`
+**Location:** `~/.config/hyprchrp/config.json`
 
 **Key Settings:**
 - `primary_shortcut` - Global hotkey (format: "SUPER+ALT+D")
@@ -153,7 +155,7 @@ Both are user-level services (no root required).
 
 **Systemd Services** are defined in `config/systemd/`:
 
-**hyprwhspr.service:**
+**hyprchrp.service:**
 - Runs the main Python application
 - User-level service
 - Restarts on failure
@@ -168,10 +170,10 @@ Both services are started automatically on login if enabled.
 
 ### Waybar Integration
 
-**Files:** `config/waybar/hyprwhspr-style.css`, `config/hyprland/hyprwhspr-tray.sh`
+**Files:** `config/waybar/hyprchrp-style.css`, `config/hyprland/hyprchrp-tray.sh`
 
-The tray script `hyprwhspr-tray.sh` provides:
-- Status monitoring (reads from `~/.config/hyprwhspr/recording_status`)
+The tray script `hyprchrp-tray.sh` provides:
+- Status monitoring (reads from `~/.config/hyprchrp/recording_status`)
 - Start/stop/toggle operations via systemd
 - Waybar JSON output for dynamic icon display
 
@@ -182,15 +184,15 @@ Click interactions:
 
 ## Installation Details
 
-**Installation Directory:** `/usr/lib/hyprwhspr/` (read-only system files)
-**User Data:** `~/.local/share/hyprwhspr/` (Python venv, runtime data)
-**Config:** `~/.config/hyprwhspr/` (user configuration)
+**Installation Directory:** `/usr/lib/hyprchrp/` (read-only system files)
+**User Data:** `~/.local/share/hyprchrp/` (Python venv, runtime data)
+**Config:** `~/.config/hyprchrp/` (user configuration)
 **Models:** `~/.local/share/pywhispercpp/models/` (Whisper model files)
 
 **Installation Process** (`scripts/install-omarchy.sh:1-200`):
 1. Detects actual user (supports sudo usage)
 2. Creates directory structure
-3. Copies system files to `/usr/lib/hyprwhspr/`
+3. Copies system files to `/usr/lib/hyprchrp/`
 4. Sets up Python venv in user space
 5. Installs pywhispercpp backend
 6. Downloads base Whisper model
@@ -227,13 +229,13 @@ Click interactions:
 
 ## Troubleshooting Resources
 
-- Service status: `systemctl --user status hyprwhspr.service ydotool.service`
-- Service logs: `journalctl --user -u hyprwhspr.service -f`
+- Service status: `systemctl --user status hyprchrp.service ydotool.service`
+- Service logs: `journalctl --user -u hyprchrp.service -f`
 - Audio devices: `pactl list short sources`
 - Whisper model files: `ls -la ~/.local/share/pywhispercpp/models/`
-- Parakeet model bundle (manual install path): `ls -la ~/.local/share/hyprwhspr/models/parakeet/`
-- Config file: `cat ~/.config/hyprwhspr/config.json`
-- Health check: `/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh health`
+- Parakeet model bundle (manual install path): `ls -la ~/.local/share/hyprchrp/models/parakeet/`
+- Config file: `cat ~/.config/hyprchrp/config.json`
+- Health check: `/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh health`
 
 ## External Dependencies
 

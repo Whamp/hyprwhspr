@@ -1,4 +1,4 @@
 """
-hyprwhspr source modules
+hyprchrp source modules
 Core functionality for voice dictation application
 """

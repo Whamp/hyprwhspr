@@ -1,0 +1,13 @@
+{
+  "custom/hyprchrp": {
+    "format": "{}",
+    "exec": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh status",
+    "interval": 1,
+    "return-type": "json",
+    "exec-on-event": true,
+    "on-click": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh toggle",
+    "on-click-right": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh start",
+    "on-click-middle": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh restart",
+    "tooltip": true
+  }
+}

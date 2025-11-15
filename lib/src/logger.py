@@ -1,5 +1,5 @@
 """
-Centralized logging system for hyprwhspr using rich for beautiful CLI output
+Centralized logging system for hyprchrp using rich for beautiful CLI output
 """
 
 from rich.console import Console

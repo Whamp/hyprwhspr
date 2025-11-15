@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# hyprwhspr - Hyprland-optimized voice dictation application
+# hyprchrp - Hyprland-optimized voice dictation application
 # Main launcher script
 
 # Get the directory where this script is located
@@ -8,16 +8,16 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PACKAGE_ROOT="$(dirname "$SCRIPT_DIR")"
 
 # Set environment variables
-export HYPRWHSPR_ROOT="$PACKAGE_ROOT"
+export HYPRCHRP_ROOT="$PACKAGE_ROOT"
 export PYTHONPATH="$PACKAGE_ROOT/lib:$PYTHONPATH"
 
 # Activate virtual environment in user space
-USER_VENV="${XDG_DATA_HOME:-$HOME/.local/share}/hyprwhspr/venv"
+USER_VENV="${XDG_DATA_HOME:-$HOME/.local/share}/hyprchrp/venv"
 if [ -f "$USER_VENV/bin/activate" ]; then
     source "$USER_VENV/bin/activate"
 else
     echo "Error: Virtual environment not found at $USER_VENV"
-    echo "Please run the installation script to set up hyprwhspr"
+    echo "Please run the installation script to set up hyprchrp"
     exit 1
 fi
 

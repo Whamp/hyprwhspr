@@ -1,5 +1,5 @@
 """
-Whisper manager for hyprwhspr
+Whisper manager for hyprchrp
 PyWhisperCPP-only backend (in-process, model kept hot)
 """
 

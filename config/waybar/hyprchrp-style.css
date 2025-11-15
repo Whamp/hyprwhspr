@@ -1,7 +1,7 @@
-/* hyprwhspr Waybar Styling - Waybar Compatible */
+/* hyprchrp Waybar Styling - Waybar Compatible */
 
 /* Base styles - same icon for all states, only colors change */
-#custom-hyprwhspr {
+#custom-hyprchrp {
   margin: 0 16px;
   font-size: 12px;
   font-weight: bold;
@@ -10,22 +10,22 @@
   transition: color 150ms ease-in-out, border-color 150ms ease-in-out;
 }
 
-#custom-hyprwhspr.ready {
+#custom-hyprchrp.ready {
   color: #059669;            /* emerald-600 - darker green for better contrast */
   border-color: transparent;
 }
 
-#custom-hyprwhspr.recording {
+#custom-hyprchrp.recording {
   color: #dc2626;            /* red-600 - darker red for better contrast */
   border-bottom-color: #dc2626;
 }
 
-#custom-hyprwhspr.error {
+#custom-hyprchrp.error {
   color: #d97706;            /* amber-600 - original perfect color */
   border-bottom-color: #d97706;
 }
 
 /* Hover effects - Waybar doesn't support filter, so we use opacity instead */
-#custom-hyprwhspr:hover {
+#custom-hyprchrp:hover {
   opacity: 0.8;
 }

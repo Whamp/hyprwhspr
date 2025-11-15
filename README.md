@@ -1,5 +1,5 @@
 <h1 align="center">
-    hyprwhspr
+    HyprChirp (hyprchrp)
 </h1>
 
 <p align="center">
@@ -26,7 +26,9 @@ https://github.com/user-attachments/assets/40cb1837-550c-4e6e-8d61-07ea59898f12
 - **Word overrides** - Customize transcriptions, prompt and corrections
 - **Run as user** - Runs in user space, just sudo once for the installer
 
-> 🔐 **PRIVATE**: hyprwhspr is local and never reads any clipboard / audio content 
+> 🔐 **PRIVATE**: hyprchrp is local and never reads any clipboard / audio content 
+
+> ℹ️ **Fork note:** HyprChirp is a hard fork of the original hyprwhspr project, layering Parakeet V3 ONNX-ASR support on top of the existing Whisper + pywhispercpp stack.
 
 ## Quick start
 
@@ -43,8 +45,8 @@ https://github.com/user-attachments/assets/40cb1837-550c-4e6e-8d61-07ea59898f12
 
 ```bash
 # Clone the repository
-git clone https://github.com/goodroot/hyprwhspr.git
-cd hyprwhspr
+git clone https://github.com/Whamp/hyprchrp.git
+cd hyprchrp
 
 # Run the automated installer
 ./scripts/install-omarchy.sh
@@ -53,11 +55,11 @@ cd hyprwhspr
 **The installer will:**
 
 1. ✅ Install system dependencies (ydotool, etc.)
-2. ✅ Copy application files to system directory (`/usr/lib/hyprwhspr`)
-3. ✅ Set up Python virtual environment in user space (`~/.local/share/hyprwhspr/venv`)
+2. ✅ Copy application files to system directory (`/usr/lib/hyprchrp`)
+3. ✅ Set up Python virtual environment in user space (`~/.local/share/hyprchrp/venv`)
 4. ✅ Install pywhispercpp backend
 5. ✅ Download base model to user space (`~/.local/share/pywhispercpp/models/ggml-base.en.bin`)
-6. ✅ Set up systemd services for hyprwhspr & ydotoolds
+6. ✅ Set up systemd services for hyprchrp & ydotoolds
 7. ✅ Configure Waybar integration
 8. ✅ Test everything works
 
@@ -71,7 +73,7 @@ cd hyprwhspr
 4. **Press `Super+Alt+D`** again to stop dictation - _boop!_
 5. **Bam!** Text appears in active buffer!
 
-Any snags, please [create an issue](https://github.com/goodroot/hyprwhspr/issues/new/choose) or visit [Omarchy Discord](https://discord.com/channels/1390012484194275541/1410373168765468774).
+Any snags, please [create an issue](https://github.com/Whamp/hyprchrp/issues/new/choose) or visit [Omarchy Discord](https://discord.com/channels/1390012484194275541/1410373168765468774).
 
 ## Usage
 
@@ -81,7 +83,7 @@ Any snags, please [create an issue](https://github.com/goodroot/hyprwhspr/issues
 
 ## Configuration
 
-Edit `~/.config/hyprwhspr/config.json`:
+Edit `~/.config/hyprchrp/config.json`:
 
 **Minimal config** - only the essentials:
 
@@ -94,7 +96,7 @@ Edit `~/.config/hyprwhspr/config.json`:
 }
 ```
 
-> `model` controls the Whisper backend, while `parakeet_model` controls the Parakeet backend. For Whisper model choices, see [model instructions](https://github.com/goodroot/hyprwhspr/tree/main?tab=readme-ov-file#whisper-models).
+> `model` controls the Whisper backend, while `parakeet_model` controls the Parakeet backend. For Whisper model choices, see [model instructions](https://github.com/Whamp/hyprchrp/tree/main?tab=readme-ov-file#whisper-models).
 
 ### Parakeet configuration
 
@@ -153,7 +155,7 @@ Examples:
 ```json
 {
     "word_overrides": {
-        "hyperwhisper": "hyprwhspr",
+        "hyperwhisper": "hyprchrp",
         "omarchie": "Omarchy"
     }
 }
@@ -267,15 +269,15 @@ _Speech-to-text replacement list via [WhisperTux](https://github.com/cjams/whisp
 
 ```json
 {
-    "custom/hyprwhspr": {
-        "exec": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh status",
+    "custom/hyprchrp": {
+        "exec": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh status",
         "interval": 2,
         "return-type": "json",
         "exec-on-event": true,
         "format": "{}",
-        "on-click": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh toggle",
-        "on-click-right": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh start",
-        "on-click-middle": "/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh restart",
+        "on-click": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh toggle",
+        "on-click-right": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh start",
+        "on-click-middle": "/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh restart",
         "tooltip": true
     }
 }
@@ -284,7 +286,7 @@ _Speech-to-text replacement list via [WhisperTux](https://github.com/cjams/whisp
 **Add CSS styling** to your `~/.config/waybar/style.css`:
 
 ```css
-@import "/usr/lib/hyprwhspr/config/waybar/hyprwhspr-style.css";
+@import "/usr/lib/hyprchrp/config/waybar/hyprchrp-style.css";
 ```
 
 **Waybar icon click interactions**:
@@ -307,7 +309,7 @@ Increase for more CPU parallelism when using CPU; on GPU, modest values are fine
 
 ## Speech backends: Parakeet (CPU) vs Whisper (GPU-capable)
 
-hyprwhspr now supports two interchangeable speech-to-text engines via the `stt_backend` setting:
+hyprchrp now supports two interchangeable speech-to-text engines via the `stt_backend` setting:
 
 - **Parakeet V3 (recommended, CPU-only):** Uses [`onnx-asr`](https://github.com/istvank/onnx-asr) with ONNX Runtime to run the `nemo-parakeet-tdt-0.6b-v3` model at Whisper-large-level accuracy on plain CPUs. First run downloads ~3.2 GB automatically, or you can point to a local model folder. Great when you want top-tier accuracy without a GPU.
 - **Whisper (pywhispercpp, GPU-capable):** Uses [`pywhispercpp`](https://github.com/abdeladim-s/pywhispercpp) for classic Whisper models (`tiny` → `large`), optionally accelerating with CUDA/ROCm/Vulkan when detected. Ideal if you already rely on Whisper models or have GPUs handy.
@@ -322,12 +324,12 @@ Select the backend explicitly in your config:
 }
 ```
 
-If `stt_backend` is omitted, hyprwhspr falls back to `"whisper"` for backward compatibility—set it to `"parakeet"` to enjoy the new CPU-only backend by default.
+If `stt_backend` is omitted, hyprchrp falls back to `"whisper"` for backward compatibility—set it to `"parakeet"` to enjoy the new CPU-only backend by default.
 
 ## Parakeet V3 (ONNX-ASR, CPU-only)
 
 - **Default model:** `nemo-parakeet-tdt-0.6b-v3` (~3.2 GB). Automatically downloaded by `onnx-asr` on first use.
-- **Manual install option:** Download from [Hugging Face](https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx) and place `encoder-model.onnx`, `decoder_joint-model.onnx`, and `vocab.txt` under `~/.local/share/hyprwhspr/models/parakeet/`, then set `parakeet_model_path` to that directory.
+- **Manual install option:** Download from [Hugging Face](https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx) and place `encoder-model.onnx`, `decoder_joint-model.onnx`, and `vocab.txt` under `~/.local/share/hyprchrp/models/parakeet/`, then set `parakeet_model_path` to that directory.
 - **Quantized builds:** Set `"parakeet_use_quantized": true` to use the `-int8` variant for lower RAM/CPU footprint.
 - **Smoke test:** `python3 scripts/test-parakeet.py` loads the model via onnx-asr and runs a quick recognition pass against `2086-149220-0033.wav`.
 
@@ -413,20 +415,20 @@ Prefer top-tier accuracy without a GPU? Jump back to [Parakeet V3 (ONNX-ASR, CPU
 
 ### Reset Installation
 
-If you're having persistent issues, you can completely reset hyprwhspr:
+If you're having persistent issues, you can completely reset hyprchrp:
 
 ```bash
 # Stop services
-systemctl --user stop hyprwhspr ydotool
+systemctl --user stop hyprchrp ydotool
 
 # Remove runtime data
-rm -rf ~/.local/share/hyprwhspr/
+rm -rf ~/.local/share/hyprchrp/
 
 # Remove user config
-rm -rf ~/.config/hyprwhspr/
+rm -rf ~/.config/hyprchrp/
 
 # Remove system files
-sudo rm -rf /usr/lib/hyprwhspr/
+sudo rm -rf /usr/lib/hyprchrp/
 ```
 
 And then...
@@ -445,11 +447,11 @@ It's fairly common in Arch and other distros for the microphone to need to be pl
 **Hotkey not working:**
 
 ```bash
-# Check service status for hyprwhspr
-systemctl --user status hyprwhspr.service
+# Check service status for hyprchrp
+systemctl --user status hyprchrp.service
 
 # Check logs
-journalctl --user -u hyprwhspr.service -f
+journalctl --user -u hyprchrp.service -f
 ```
 
 ```bash
@@ -464,7 +466,7 @@ journalctl --user -u ydotool.service -f
 
 ```bash
 # Fix uinput permissions
-/usr/lib/hyprwhspr/scripts/fix-uinput-permissions.sh
+/usr/lib/hyprchrp/scripts/fix-uinput-permissions.sh
 
 # Log out and back in
 ```
@@ -485,10 +487,10 @@ systemctl --user restart pipewire
 
 ```bash
 # Check if audio feedback is enabled in config
-cat ~/.config/hyprwhspr/config.json | grep audio_feedback
+cat ~/.config/hyprchrp/config.json | grep audio_feedback
 
 # Verify sound files exist
-ls -la /usr/lib/hyprwhspr/share/assets/
+ls -la /usr/lib/hyprchrp/share/assets/
 
 # Check if ffplay/aplay/paplay is available
 which ffplay aplay paplay
@@ -505,7 +507,7 @@ cd ~/.local/share/pywhispercpp/models/
 wget https://huggingface.co/ggerganov/whisper.cpp/resolve/main/ggml-base.en.bin
 
 # Verify model path in config
-cat ~/.config/hyprwhspr/config.json | grep model
+cat ~/.config/hyprchrp/config.json | grep model
 ```
 
 **Parakeet model not found / onnx-asr errors:**
@@ -515,7 +517,7 @@ cat ~/.config/hyprwhspr/config.json | grep model
 pip install --upgrade onnx-asr onnxruntime
 
 # Verify manual model files if you set parakeet_model_path
-ls ~/.local/share/hyprwhspr/models/parakeet/
+ls ~/.local/share/hyprchrp/models/parakeet/
 
 # Download the official bundle if files are missing
 xdg-open https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx
@@ -528,30 +530,30 @@ xdg-open https://huggingface.co/istupakov/parakeet-tdt-0.6b-v3-onnx
 
 ```bash
 # Check service health and auto-recover
-/usr/lib/hyprwhspr/config/hyprland/hyprwhspr-tray.sh health
+/usr/lib/hyprchrp/config/hyprland/hyprchrp-tray.sh health
 
 # Manual restart if needed
-systemctl --user restart hyprwhspr.service
+systemctl --user restart hyprchrp.service
 
 # Check service status
-systemctl --user status hyprwhspr.service
+systemctl --user status hyprchrp.service
 ```
 
 ## Architecture
 
-**hyprwhspr is designed as a system package:**
+**hyprchrp is designed as a system package:**
 
-- **`/usr/lib/hyprwhspr/`** - Main installation directory
-- **`/usr/lib/hyprwhspr/lib/`** - Python application
+- **`/usr/lib/hyprchrp/`** - Main installation directory
+- **`/usr/lib/hyprchrp/lib/`** - Python application
 - **`~/.local/share/pywhispercpp/models/`** - Whisper models (user space)
-- **`~/.config/hyprwhspr/`** - User configuration
+- **`~/.config/hyprchrp/`** - User configuration
 - **`~/.config/systemd/user/`** - Systemd service
 
 ### Systemd integration
 
-**hyprwhspr uses systemd for reliable service management:**
+**hyprchrp uses systemd for reliable service management:**
 
-- **`hyprwhspr.service`** - Main application service with auto-restart
+- **`hyprchrp.service`** - Main application service with auto-restart
 - **`ydotool.service`** - Input injection daemon service
 - **Tray integration** - All tray operations use systemd commands
 - **Process management** - No manual process killing or starting
@@ -559,10 +561,10 @@ systemctl --user status hyprwhspr.service
 
 ## Getting help
 
-1. **Check logs**: `journalctl --user -u hyprwhspr.service` `journalctl --user -u ydotool.service`
+1. **Check logs**: `journalctl --user -u hyprchrp.service` `journalctl --user -u ydotool.service`
 2. **Verify permissions**: Run the permissions fix script
 3. **Test components**: Check ydotool, audio devices, whisper.cpp
-4. **Report issues**: [Create an issue](https://github.com/goodroot/hyprwhspr/issues/new/choose) or visit [Omarchy Discord](https://discord.com/channels/1390012484194275541/1410373168765468774) - logging info helpful!
+4. **Report issues**: [Create an issue](https://github.com/Whamp/hyprchrp/issues/new/choose) or visit [Omarchy Discord](https://discord.com/channels/1390012484194275541/1410373168765468774) - logging info helpful!
 
 ## License
 

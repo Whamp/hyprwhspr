@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# hyprwhspr System Tray Status Script
-# Shows hyprwhspr status in the Hyprland system tray with JSON output
+# hyprchrp System Tray Status Script
+# Shows hyprchrp status in the Hyprland system tray with JSON output
 
-PACKAGE_ROOT="/usr/lib/hyprwhspr"
+PACKAGE_ROOT="/usr/lib/hyprchrp"
 
-ICON_PATH="$PACKAGE_ROOT/share/assets/hyprwhspr.png"
+ICON_PATH="$PACKAGE_ROOT/share/assets/hyprchrp.png"
 
 # Performance optimization: command caching
 _now=$(date +%s%3N 2>/dev/null || date +%s)  # ms if available
@@ -29,9 +29,9 @@ _date_ms(){ date +%s%3N 2>/dev/null || date +%s; }
 # Tiny helper for fast, safe command execution
 try() { timeout 0.2s bash -lc "$*" 2>/dev/null; }
 
-# Function to check if hyprwhspr is running
-is_hyprwhspr_running() {
-    systemctl --user is-active --quiet hyprwhspr.service
+# Function to check if hyprchrp is running
+is_hyprchrp_running() {
+    systemctl --user is-active --quiet hyprchrp.service
 }
 
 # Function to check if ydotoold is running and working
@@ -54,7 +54,7 @@ is_pipewire_ok() {
 
 # Function to check if model file exists
 model_exists() {
-    local cfg="$HOME/.config/hyprwhspr/config.json"
+    local cfg="$HOME/.config/hyprchrp/config.json"
     local model_path
     model_path=$(grep -oE '"model"\s*:\s*"[^"]+"' "$cfg" 2>/dev/null | cut -d\" -f4)
     [[ -n "$model_path" ]] || return 0  # use defaults; skip
@@ -84,18 +84,18 @@ mic_accessible() {
 }
 
 mic_recording_now() {
-    # Only consider it recording if hyprwhspr service is active AND actually recording
-    if ! is_hyprwhspr_running; then
+    # Only consider it recording if hyprchrp service is active AND actually recording
+    if ! is_hyprchrp_running; then
         return 1
     fi
     
-    # Check if hyprwhspr process is actually running
-    if ! pgrep -f "hyprwhspr" > /dev/null 2>&1; then
+    # Check if hyprchrp process is actually running
+    if ! pgrep -f "hyprchrp" > /dev/null 2>&1; then
         return 1
     fi
     
-    # Check recording status file written by hyprwhspr
-    local status_file="$HOME/.config/hyprwhspr/recording_status"
+    # Check recording status file written by hyprchrp
+    local status_file="$HOME/.config/hyprchrp/recording_status"
     if [[ -f "$status_file" ]]; then
         local status
         status=$(cat "$status_file" 2>/dev/null)
@@ -105,7 +105,7 @@ mic_recording_now() {
             return 1
         fi
     else
-        # No recording status file means hyprwhspr is not recording
+        # No recording status file means hyprchrp is not recording
         return 1
     fi
 }
@@ -147,10 +147,10 @@ can_start_recording() {
     mic_present && mic_accessible
 }
 
-# Function to check if hyprwhspr is currently recording
-is_hyprwhspr_recording() {
-    # Check if hyprwhspr is running
-    if ! is_hyprwhspr_running; then
+# Function to check if hyprchrp is currently recording
+is_hyprchrp_recording() {
+    # Check if hyprchrp is running
+    if ! is_hyprchrp_running; then
         return 1
     fi
     
@@ -171,20 +171,20 @@ show_notification() {
     fi
 }
 
-# Function to toggle hyprwhspr
-toggle_hyprwhspr() {
-    if is_hyprwhspr_running; then
-        echo "Stopping hyprwhspr..."
-        systemctl --user stop hyprwhspr.service
-        show_notification "hyprwhspr" "Stopped" "low"
+# Function to toggle hyprchrp
+toggle_hyprchrp() {
+    if is_hyprchrp_running; then
+        echo "Stopping hyprchrp..."
+        systemctl --user stop hyprchrp.service
+        show_notification "hyprchrp" "Stopped" "low"
     else
         if can_start_recording; then
-            echo "Starting hyprwhspr..."
-            systemctl --user start hyprwhspr.service
-            show_notification "hyprwhspr" "Started" "normal"
+            echo "Starting hyprchrp..."
+            systemctl --user start hyprchrp.service
+            show_notification "hyprchrp" "Started" "normal"
         else
-            echo "Cannot start hyprwhspr - no microphone available"
-            show_notification "hyprwhspr" "No microphone available" "critical"
+            echo "Cannot start hyprchrp - no microphone available"
+            show_notification "hyprchrp" "No microphone available" "critical"
             return 1
         fi
     fi
@@ -197,28 +197,28 @@ start_ydotoold() {
         systemctl --user start ydotool.service  # Using system service
         sleep 1
         if is_ydotoold_running; then
-            show_notification "hyprwhspr" "ydotoold started" "low"
+            show_notification "hyprchrp" "ydotoold started" "low"
         else
-            show_notification "hyprwhspr" "Failed to start ydotoold" "critical"
+            show_notification "hyprchrp" "Failed to start ydotoold" "critical"
         fi
     fi
 }
 
 # Function to check service health and recover from stuck states
 check_service_health() {
-    if is_hyprwhspr_running; then
+    if is_hyprchrp_running; then
         # Check if service has been in "activating" state too long
-        local service_status=$(systemctl --user show hyprwhspr.service --property=ActiveState --value)
+        local service_status=$(systemctl --user show hyprchrp.service --property=ActiveState --value)
         
         if [ "$service_status" = "activating" ]; then
             # Service is stuck starting, restart it
             echo "Service stuck in activating state, restarting..."
-            systemctl --user restart hyprwhspr.service
+            systemctl --user restart hyprchrp.service
             return 1
         fi
         
         # Check if recording state is stuck (running but no actual audio)
-        if is_hyprwhspr_running && ! is_hyprwhspr_recording; then
+        if is_hyprchrp_running && ! is_hyprchrp_recording; then
             # Service is running but not recording - this is normal
             return 0
         fi
@@ -235,23 +235,23 @@ emit_json() {
         "recording")
             icon="󰍬"
             text="$icon REC"
-            tooltip="hyprwhspr: Currently recording\n\nLeft-click: Stop recording\nRight-click: Restart\nMiddle-click: Restart"
+            tooltip="hyprchrp: Currently recording\n\nLeft-click: Stop recording\nRight-click: Restart\nMiddle-click: Restart"
             ;;
         "error")
             icon="󰆉"
             text="$icon ERR"
-            tooltip="hyprwhspr: Issue detected${reason:+ ($reason)}\n\nLeft-click: Toggle service\nRight-click: Start service\nMiddle-click: Restart service"
+            tooltip="hyprchrp: Issue detected${reason:+ ($reason)}\n\nLeft-click: Toggle service\nRight-click: Start service\nMiddle-click: Restart service"
             class="error"
             ;;
         "ready")
             icon="󰍬"
             text="$icon RDY"
-            tooltip="hyprwhspr: Ready to record\n\nLeft-click: Start recording\nRight-click: Start service\nMiddle-click: Restart service"
+            tooltip="hyprchrp: Ready to record\n\nLeft-click: Start recording\nRight-click: Start service\nMiddle-click: Restart service"
             ;;
         *)
             icon="󰆉"
             text="$icon"
-            tooltip="hyprwhspr: Unknown state\n\nLeft-click: Toggle service\nRight-click: Start service\nMiddle-click: Restart service"
+            tooltip="hyprchrp: Unknown state\n\nLeft-click: Toggle service\nRight-click: Start service\nMiddle-click: Restart service"
             class="error"
             state="error"
             ;;
@@ -274,12 +274,12 @@ get_current_state() {
     check_service_health
     
     # Check if service is running
-    if ! systemctl --user is-active --quiet hyprwhspr.service; then
+    if ! systemctl --user is-active --quiet hyprchrp.service; then
         # Distinguish failed from inactive
-        if systemctl --user is-failed --quiet hyprwhspr.service; then
+        if systemctl --user is-failed --quiet hyprchrp.service; then
             local result exec_code
-            result=$(systemctl --user show hyprwhspr.service -p Result --value 2>/dev/null)
-            exec_code=$(systemctl --user show hyprwhspr.service -p ExecMainStatus --value 2>/dev/null)
+            result=$(systemctl --user show hyprchrp.service -p Result --value 2>/dev/null)
+            exec_code=$(systemctl --user show hyprchrp.service -p ExecMainStatus --value 2>/dev/null)
             reason="service_failed:${result:-unknown}:${exec_code:-}"
         else
             reason="service_inactive"
@@ -288,7 +288,7 @@ get_current_state() {
     fi
     
     # Service is running - check if recording
-    if is_hyprwhspr_recording; then
+    if is_hyprchrp_recording; then
         echo "recording"; return
     fi
     
@@ -317,26 +317,26 @@ case "${1:-status}" in
         emit_json "$s" "$r" "$(mic_tooltip_line)"
         ;;
     "toggle")
-        toggle_hyprwhspr
+        toggle_hyprchrp
         IFS=: read -r s r <<<"$(get_current_state)"
         emit_json "$s" "$r" "$(mic_tooltip_line)"
         ;;
     "start")
-        if ! is_hyprwhspr_running; then
+        if ! is_hyprchrp_running; then
             if can_start_recording; then
-                systemctl --user start hyprwhspr.service
-                show_notification "hyprwhspr" "Started" "normal"
+                systemctl --user start hyprchrp.service
+                show_notification "hyprchrp" "Started" "normal"
             else
-                show_notification "hyprwhspr" "No microphone available" "critical"
+                show_notification "hyprchrp" "No microphone available" "critical"
             fi
         fi
         IFS=: read -r s r <<<"$(get_current_state)"
         emit_json "$s" "$r" "$(mic_tooltip_line)"
         ;;
     "stop")
-        if is_hyprwhspr_running; then
-            systemctl --user stop hyprwhspr.service
-            show_notification "hyprwhspr" "Stopped" "low"
+        if is_hyprchrp_running; then
+            systemctl --user stop hyprchrp.service
+            show_notification "hyprchrp" "Stopped" "low"
         fi
         IFS=: read -r s r <<<"$(get_current_state)"
         emit_json "$s" "$r" "$(mic_tooltip_line)"
@@ -347,8 +347,8 @@ case "${1:-status}" in
         emit_json "$s" "$r" "$(mic_tooltip_line)"
         ;;
     "restart")
-        systemctl --user restart hyprwhspr.service
-        show_notification "hyprwhspr" "Restarted" "normal"
+        systemctl --user restart hyprchrp.service
+        show_notification "hyprchrp" "Restarted" "normal"
         IFS=: read -r s r <<<"$(get_current_state)"
         emit_json "$s" "$r" "$(mic_tooltip_line)"
         ;;
@@ -367,11 +367,11 @@ case "${1:-status}" in
         echo ""
         echo "Commands:"
         echo "  status    - Show current status (JSON output)"
-        echo "  toggle    - Toggle hyprwhspr on/off"
-        echo "  start     - Start hyprwhspr"
-        echo "  stop      - Stop hyprwhspr"
+        echo "  toggle    - Toggle hyprchrp on/off"
+        echo "  start     - Start hyprchrp"
+        echo "  stop      - Stop hyprchrp"
         echo "  ydotoold  - Start ydotoold daemon"
-        echo "  restart   - Restart hyprwhspr"
+        echo "  restart   - Restart hyprchrp"
         echo "  health    - Check service health and recover if needed"
         ;;
 esac

@@ -1,7 +1,7 @@
 """
-Test script for Parakeet ONNX backend in hyprwhspr
+Test script for Parakeet ONNX backend in hyprchrp
 
-hyprwhspr is a native speech-to-text application for Arch Linux/Omarchy
+hyprchrp is a native speech-to-text application for Arch Linux/Omarchy
 with Hyprland desktop environment. This script tests the Parakeet TDT v3
 model using the onnx-asr library.
 

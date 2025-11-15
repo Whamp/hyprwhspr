@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """
-hyprwhspr - Voice dictation application for Hyprland (Headless Mode)
+hyprchrp - Voice dictation application for Hyprland (Headless Mode)
 Fast, reliable speech-to-text with instant text injection
 """
 
-print("🚀 HYPRWHSPR STARTING UP!")
+print("🚀 HYPRCHRP STARTING UP!")
 print("=" * 50)
 
 import sys
@@ -23,8 +23,8 @@ from text_injector import TextInjector
 from global_shortcuts import GlobalShortcuts
 from audio_manager import AudioManager
 
-class hyprwhsprApp:
-    """Main application class for hyprwhspr voice dictation (Headless Mode)"""
+class HyprChrpApp:
+    """Main application class for hyprchrp voice dictation (Headless Mode)"""
 
     def __init__(self):
         # Initialize core components
@@ -156,7 +156,7 @@ class hyprwhsprApp:
     def _write_recording_status(self, is_recording):
         """Write recording status to file for tray script"""
         try:
-            status_file = Path.home() / '.config' / 'hyprwhspr' / 'recording_status'
+            status_file = Path.home() / '.config' / 'hyprchrp' / 'recording_status'
             status_file.parent.mkdir(parents=True, exist_ok=True)
             
             if is_recording:
@@ -171,7 +171,7 @@ class hyprwhsprApp:
 
     def run(self):
         """Start the application"""
-        print("🚀 Starting hyprwhspr...")
+        print("🚀 Starting hyprchrp...")
 
         # Initialize whisper manager
         if not self.whisper_manager.initialize():
@@ -179,7 +179,7 @@ class hyprwhsprApp:
             print("Run the build scripts first.")
             return False
 
-        print("✅ hyprwhspr initialized successfully")
+        print("✅ hyprchrp initialized successfully")
         print("🎤 Listening for global shortcuts...")
         
         # Start global shortcuts
@@ -191,7 +191,7 @@ class hyprwhsprApp:
             while True:
                 time.sleep(1)
         except KeyboardInterrupt:
-            print("\n🛑 Shutting down hyprwhspr...")
+            print("\n🛑 Shutting down hyprchrp...")
             self._cleanup()
         except Exception as e:
             print(f"❌ Error in main loop: {e}")
@@ -222,14 +222,14 @@ class hyprwhsprApp:
 
 def main():
     """Main entry point"""
-    print("🎤 hyprwhspr")
-    print("🚀 Starting hyprwhspr...")
+    print("🎤 hyprchrp")
+    print("🚀 Starting hyprchrp...")
     
     try:
-        app = hyprwhsprApp()
+        app = HyprChrpApp()
         app.run()
     except KeyboardInterrupt:
-        print("\n🛑 Stopping hyprwhspr...")
+        print("\n🛑 Stopping hyprchrp...")
         app._cleanup()
     except Exception as e:
         print(f"❌ Error: {e}")
