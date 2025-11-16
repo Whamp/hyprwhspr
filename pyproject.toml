@@ -18,3 +18,11 @@ dependencies = [
     "onnxruntime>=1.15.0",
     "onnx-asr>=0.7.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.6",
+    "black>=24.0",
+    "mypy>=1.10",
+]
