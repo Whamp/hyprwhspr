@@ -7,9 +7,8 @@ Wants=pipewire.service ydotool.service
 [Service]
 Type=simple
 ExecStartPre=/bin/sleep 2
-ExecStart=/usr/bin/mise exec -- python3 /usr/lib/hyprchrp/lib/main.py
+ExecStart=/usr/lib/hyprchrp/bin/hyprchrp
 Environment=HYPRCHRP_ROOT=/usr/lib/hyprchrp
-Environment=MISE_INSTALL_DIR=/usr/lib/hyprchrp
 WorkingDirectory=/usr/lib/hyprchrp
 Restart=on-failure
 RestartSec=5
