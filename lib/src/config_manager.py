@@ -21,22 +21,42 @@ class ConfigManager:
             'parakeet_model_path': None,  # Custom path override for Parakeet models
             'parakeet_use_quantized': False,  # Use int8 quantized models (faster, less accurate)
             'threads': 4,  # Thread count for whisper processing
-            # Language code (None = auto-detect, or 'en', 'nl', 'fr', etc.)
-            'language': None,
-            # Dictionary of word replacements: {"original": "replacement"}
-            'word_overrides': {},
+            'language': '',  # Default language (can be set to None for auto-detect)
+            'audio_feedback': True,
+            'audio_volume': 0.5,
+            'start_sound_volume': 0.5,
+            'stop_sound_volume': 0.5,
+            'start_sound_path': 'ping-up.ogg',
+            'stop_sound_path': 'ping-down.ogg',
             'whisper_prompt': (
                 'Transcribe with proper capitalization, including sentence beginnings, '
                 'proper nouns, titles, and standard English capitalization rules.'
             ),
-            # Boolean: true = clear clipboard after delay, false = keep current behavior
-            'clipboard_behavior': False,
-            # Float seconds before clearing clipboard (used only if clipboard_behavior is true)
-            'clipboard_clear_delay': 5.0,
-            # Values: "super" | "ctrl_shift" | "ctrl"; default aligns with Super+V on Omarchy
-            'paste_mode': 'super',
-            # Back-compat for older configs (used only if paste_mode is absent):
-            'shift_paste': True  # true = Ctrl+Shift+V, false = Ctrl+V
+            # Clipboard handling defaults
+            'clipboard_behavior': True,
+            'clipboard_clear_delay': 1.0,
+            # Paste strategy defaults
+            'paste_mode': 'super',  # Values: "super" | "ctrl_shift" | "ctrl"
+            'shift_paste': True,  # Back-compat for older configs (only if paste_mode missing)
+            'inject_strategy': 'paste',
+            # Dictionary of word replacements: {"original": "replacement"}
+            'word_overrides': {
+                'Umarji': 'Omarchy',
+                'umarchy': 'Omarchy',
+                'Omarkey': 'Omarchy',
+                'Oh, Marquis.': 'Omarchy',
+                'Omachi': 'Omarchy',
+                'Omarche': 'Omarchy',
+                'Omachie': 'Omarchy',
+                'clod.md': 'CLAUDE.md',
+                'Cloud Code': 'Claude Code',
+                'Clod': 'Claude',
+                'CLAWD': 'Claude',
+                'plot.md': 'CLAUDE.md',
+                'clot.md': 'CLAUDE.md',
+                'claw.md': 'CLAUDE.md',
+                'agents.md': 'AGENTS.md'
+            }
         }
 
         # Set up config directory and file path

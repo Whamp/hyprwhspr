@@ -45,7 +45,7 @@ class HyprChrpApp:
     def _setup_global_shortcuts(self):
         """Initialize global keyboard shortcuts"""
         try:
-            shortcut_key = self.config.get_setting('primary_shortcut', 'Super+Alt+D')
+            shortcut_key = self.config.get_setting('primary_shortcut', 'Ctrl+Shift')
             self.global_shortcuts = GlobalShortcuts(shortcut_key, self._on_shortcut_triggered)
             print(f"🎯 Global shortcut configured: {shortcut_key}")
         except Exception as e:

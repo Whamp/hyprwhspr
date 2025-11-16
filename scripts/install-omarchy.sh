@@ -781,27 +781,59 @@ EOF
 setup_user_config() {
   log_info "User config…"
   mkdir -p "$USER_CONFIG_DIR"
-  if [ ! -f "$USER_CONFIG_DIR/config.json" ]; then
-    cat > "$USER_CONFIG_DIR/config.json" <<'CFG'
-{
-  "primary_shortcut": "SUPER+ALT+D",
-  "model": "base.en",
-  "audio_feedback": true,
-  "start_sound_volume": 0.5,
-  "stop_sound_volume": 0.5,
-  "start_sound_path": "ping-up.ogg",
-  "stop_sound_path": "ping-down.ogg",
-  "word_overrides": {}
-}
-CFG
-    log_success "Created $USER_CONFIG_DIR/config.json"
-  else
-    sed -i 's|"model": "[^"]*"|"model": "base.en"|' "$USER_CONFIG_DIR/config.json"
-    if ! grep -q "\"audio_feedback\"" "$USER_CONFIG_DIR/config.json"; then
-      sed -i 's|"word_overrides": {}|"audio_feedback": true,\n    "start_sound_volume": 0.5,\n    "stop_sound_volume": 0.5,\n    "start_sound_path": "ping-up.ogg",\n    "stop_sound_path": "ping-down.ogg",\n    "word_overrides": {}|' "$USER_CONFIG_DIR/config.json"
-    fi
-    log_success "Updated existing config"
+  chown "$ACTUAL_USER":"$ACTUAL_USER" "$USER_CONFIG_DIR" 2>/dev/null || true
+
+  local config_file="$USER_CONFIG_DIR/config.json"
+  if [ -f "$config_file" ]; then
+    log_info "Existing config found at $config_file (unchanged)"
+    return 0
   fi
+
+  local python_bin="$VENV_DIR/bin/python"
+  if [ ! -x "$python_bin" ]; then
+    log_error "Python environment missing at $python_bin; cannot generate config"
+    return 1
+  fi
+
+  log_info "Generating default config via ConfigManager"
+
+  if [ "$EUID" -eq 0 ] && [ "$ACTUAL_USER" != "root" ]; then
+    if ! sudo -H -u "$ACTUAL_USER" env \
+      HOME="$USER_HOME" \
+      XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$USER_HOME/.config}" \
+      PYTHONPATH="$INSTALL_DIR/lib" \
+      HYPRCHRP_ROOT="$INSTALL_DIR" \
+      "$python_bin" - <<'PY'
+from src.config_manager import ConfigManager
+
+cm = ConfigManager()
+cm.reset_to_defaults()
+cm.save_config()
+PY
+    then
+      log_error "Failed to generate user config via ConfigManager"
+      return 1
+    fi
+  else
+    if ! env \
+      HOME="$USER_HOME" \
+      XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$USER_HOME/.config}" \
+      PYTHONPATH="$INSTALL_DIR/lib" \
+      HYPRCHRP_ROOT="$INSTALL_DIR" \
+      "$python_bin" - <<'PY'
+from src.config_manager import ConfigManager
+
+cm = ConfigManager()
+cm.reset_to_defaults()
+cm.save_config()
+PY
+    then
+      log_error "Failed to generate user config via ConfigManager"
+      return 1
+    fi
+  fi
+
+  log_success "Created $config_file from ConfigManager defaults"
 }
 
 # ----------------------- Permissions & uinput ------------------

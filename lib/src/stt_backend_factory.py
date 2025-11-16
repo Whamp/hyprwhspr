@@ -23,7 +23,7 @@ class STTBackendFactory:
         Returns:
             STT backend instance (WhisperManager or ParakeetManager)
         """
-        backend_name = config_manager.get_setting('stt_backend', 'whisper')
+        backend_name = config_manager.get_setting('stt_backend', 'parakeet')
 
         if backend_name == 'parakeet':
             log_info("Creating Parakeet backend", "FACTORY")
