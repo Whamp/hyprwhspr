@@ -467,9 +467,23 @@ Prefer top-tier accuracy without a GPU? Jump back to [Parakeet V3 (ONNX-ASR, CPU
 
 ## Troubleshooting
 
-### Reset Installation
+### Reset / Uninstall hyprchrp
 
-If you're having persistent issues, you can completely reset hyprchrp:
+Use the bundled `scripts/uninstall-hyprchrp.sh` to remove everything the installer touched (services, config, runtime data, Waybar integration, `/usr/lib/hyprchrp` when not package-managed):
+
+```bash
+# Preferred: fully remove hyprchrp artifacts for the current user
+./scripts/uninstall-hyprchrp.sh
+```
+
+The script is idempotent, stops/disables the service, and refuses to delete `/usr/lib/hyprchrp` if a package owns it (you'll be instructed to run `sudo pacman -Rns <pkg>` instead). Helpful flags:
+
+- `--dry-run` – show what would be removed without changing anything
+- `-y` / `--yes` – non-interactive mode (auto-confirm prompts)
+- `--purge-models` – also delete `~/.local/share/pywhispercpp/models` (shared Whisper weights)
+- `--purge-uinput-rule` – remove `/etc/udev/rules.d/99-uinput.rules` and print commands to drop `input`/`tty` group membership
+
+Prefer the manual reset? Run:
 
 ```bash
 # Stop services
@@ -481,14 +495,13 @@ rm -rf ~/.local/share/hyprchrp/
 # Remove user config
 rm -rf ~/.config/hyprchrp/
 
-# Remove system files
+# Remove system files (only if not owned by a package!)
 sudo rm -rf /usr/lib/hyprchrp/
 ```
 
-And then...
+Reinstall after either approach:
 
 ```bash
-# Then reinstall fresh
 ./scripts/install-omarchy.sh
 ```
 

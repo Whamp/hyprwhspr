@@ -37,6 +37,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 /usr/lib/hyprchrp/scripts/fix-uinput-permissions.sh
 ```
 
+### Uninstall / Reset
+```bash
+# Preferred: remove hyprchrp services, configs, runtime data, Waybar hooks, etc.
+./scripts/uninstall-hyprchrp.sh
+
+# Preview work without touching the system
+./scripts/uninstall-hyprchrp.sh --dry-run
+
+# Non-interactive or extra cleanup options
+./scripts/uninstall-hyprchrp.sh -y --purge-models --purge-uinput-rule
+```
+- Stops/disables the user service, removes `~/.config/.local/share/.local/state` hyprchrp data, cleans Waybar integration, and deletes `/usr/lib/hyprchrp` when it isn’t owned by a package (otherwise instructs `pacman -Rns`).
+- `--purge-models` also deletes `~/.local/share/pywhispercpp/models` (shared Whisper weights) and `--purge-uinput-rule` removes `/etc/udev/rules.d/99-uinput.rules` plus prints the commands to drop the `input`/`tty` groups.
+
 ### Running the Application
 ```bash
 # Via systemd service (recommended)
